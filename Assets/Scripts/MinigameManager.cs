@@ -64,9 +64,16 @@ public class MinigameManager : MonoBehaviour
 
     #region Methods
 
-    public static void LaunchMinigame()
+    public static void LaunchMinigame(int index = -1)
     {
-        MinigameManager.entity.LocalLaunchMinigame();
+        if(index == -1)
+        {
+            MinigameManager.entity.LocalLaunchMinigame();
+        }
+        else
+        {
+            MinigameManager.entity.LocallaunchMinigame(index);
+        }
     }
 
     private void LocalLaunchMinigame()
@@ -86,10 +93,20 @@ public class MinigameManager : MonoBehaviour
                     randomGameIndex = ran.Next(0, this.minigames.Length - 1);
                 } while (this.lastMinigameindex == randomGameIndex);
             }
-            this.minigames[randomGameIndex].gameObject.SetActive(true);
-            this.minigames[randomGameIndex].OnMinigameWin += this._onMinigameWin;
-            this.minigames[randomGameIndex].OnMinigameLost += this._onMinigameLost;
+            LocallaunchMinigame(randomGameIndex);
             this.lastMinigameindex = randomGameIndex;
+        }
+    }
+    private void LocallaunchMinigame(int index)
+    {
+        if(this.minigames != null)
+        {
+            if (index >= 0 && index < this.minigames.Length)
+            {
+                this.minigames[index].gameObject.SetActive(true);
+                this.minigames[index].OnMinigameWin += this._onMinigameWin;
+                this.minigames[index].OnMinigameLost += this._onMinigameLost;
+            }
         }
     }
     

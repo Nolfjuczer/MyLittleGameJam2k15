@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using System;
 
 public class MinigameTestManager : MonoBehaviour
 {
     #region Variables
+
+    public int indexToLaunch = 0;
+
     #endregion
 
     void Start () 
@@ -37,5 +42,9 @@ public class MinigameTestManager : MonoBehaviour
     public void LaunchMinigame()
     {
         MinigameManager.LaunchMinigame();
+    }
+    public void LaunchWithIndex()
+    {
+        MinigameManager.LaunchMinigame(this.indexToLaunch);
     }
 }
