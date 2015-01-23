@@ -52,6 +52,9 @@ public class GuitarButtons : Minigame
                 Vector3 pos = this.buttonsProcessed[i].rectTransform.localPosition;
                 pos = Vector3.Lerp(this.StartPos, EndPos, this.buttonsProcessed[i].progres);
                 this.buttonsProcessed[i].rectTransform.localPosition = pos;
+
+                Color tmpColor = this.buttonsProcessed[i].image.color;
+                //tmpColor.a = 
             }
         }
 
