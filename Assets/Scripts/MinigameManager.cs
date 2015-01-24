@@ -90,7 +90,7 @@ public class MinigameManager : MonoBehaviour
                 System.Random ran = new System.Random();
                 do
                 {
-                    randomGameIndex = ran.Next(0, this.minigames.Length - 1);
+                    randomGameIndex = ran.Next(0, this.minigames.Length);
                 } while (this.lastMinigameindex == randomGameIndex);
             }
             LocallaunchMinigame(randomGameIndex);
