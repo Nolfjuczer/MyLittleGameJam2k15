@@ -89,7 +89,7 @@ public class DeviceController : MonoBehaviour {
             do
             {
                 tmp = Random.Range(0, Devices.Count);
-            } while (Devices[tmp].GetComponent<Device>().IsWorking);
+            } while (!Devices[tmp].GetComponent<Device>().IsWorking);
             Devices[tmp].GetComponent<Device>().DestroyDevice();
         }
     }
