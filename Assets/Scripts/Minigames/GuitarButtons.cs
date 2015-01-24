@@ -203,6 +203,7 @@ public class GuitarButtons : Minigame
             if (this.buttonHitCount >= this.hitCountTarget)
             {
                 NotifyOnMinigameWin();
+                this.minigamePaused = true;
                 //IncreaseDiff();
             }
         }
@@ -329,6 +330,7 @@ public class GuitarButtons : Minigame
     void Miss()
     {
         OnMinigameLost();
+        this.minigamePaused = true;
         this.shouldIncreaseDiff = true;
         //IncreaseDiff();
 

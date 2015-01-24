@@ -13,7 +13,7 @@ public class MinigameManager : MonoBehaviour
 
     private bool _isMinigamePlaying = false;
 
-    private float defaultTimeMultipler = 1.0f;
+    //private float defaultTimeMultipler = 1.0f;
     private float _timeMultipler = 1.0f;
     public static float TimeMultiplier
     {
