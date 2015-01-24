@@ -37,7 +37,7 @@ public class Device : MonoBehaviour {
             MinigameManager.OnMinigameWin += Win;
             MinigameManager.OnMinigameLost += Lose;
             player = col.gameObject;
-            player.GetComponent<PlayerController>().enabled = false;
+            //player.GetComponent<PlayerController>()
         }
     }
 
@@ -48,7 +48,7 @@ public class Device : MonoBehaviour {
         GameController.Instance.SomethingFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
-        player.GetComponent<PlayerController>().enabled = true;
+        //player.GetComponent<PlayerController>().enabled = true;
         player = null;
     }
 
@@ -58,7 +58,7 @@ public class Device : MonoBehaviour {
         GameController.Instance.SomethingNotFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
-        player.GetComponent<PlayerController>().enabled = true;
+        //player.GetComponent<PlayerController>().enabled = true;
         player = null;
     }
 }

@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        this.transform.position += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f).normalized * Time.deltaTime * MovementSpeed;
+        if(!MinigameManager.IsMinigamePlaying)
+        {
+            this.transform.position += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f).normalized * Time.deltaTime * MovementSpeed;
+        }
 	}
 }

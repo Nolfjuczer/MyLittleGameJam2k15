@@ -11,6 +11,8 @@ public class MinigameManager : MonoBehaviour
     private static MinigameManager entity = null;
     int lastMinigameindex = -1;
 
+    private bool _isMinigamePlaying = false;
+
     #endregion
 
     #region Events
@@ -44,6 +46,14 @@ public class MinigameManager : MonoBehaviour
             MinigameManager.entity._onMinigameLost = value;
         }
     }
+    public static bool IsMinigamePlaying
+    {
+        get
+        {
+            return MinigameManager.entity._isMinigamePlaying;
+        }
+    }
+
     #endregion
 
     #region Monobehaviour Methods
@@ -60,6 +70,17 @@ public class MinigameManager : MonoBehaviour
     {
 
     }
+    void OnEnable()
+    {
+        this._onMinigameWin += MinigameEndHandler;
+        this._onMinigameLost += MinigameEndHandler;
+    }
+    void OnDisable()
+    {
+        this._onMinigameWin -= MinigameEndHandler;
+        this._onMinigameLost -= MinigameEndHandler;
+    }
+
     #endregion
 
     #region Methods
@@ -95,6 +116,7 @@ public class MinigameManager : MonoBehaviour
             }
             LocallaunchMinigame(randomGameIndex);
             this.lastMinigameindex = randomGameIndex;
+            this._isMinigamePlaying = true;
         }
     }
     private void LocallaunchMinigame(int index)
@@ -123,6 +145,10 @@ public class MinigameManager : MonoBehaviour
         {
             this._onMinigameLost();
         }
+    }
+    void MinigameEndHandler()
+    {
+        this._isMinigamePlaying = false;
     }
 
     #endregion

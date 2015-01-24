@@ -198,12 +198,10 @@ public class GuitarButtons : Minigame
                 CheckButtonPressed(button_Y);
             }
 
-
-
             if (this.buttonHitCount >= this.hitCountTarget)
             {
                 NotifyOnMinigameWin();
-                IncreaseDiff();
+                //IncreaseDiff();
             }
         }
 	}
