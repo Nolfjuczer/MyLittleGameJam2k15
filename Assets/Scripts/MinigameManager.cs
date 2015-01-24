@@ -23,6 +23,9 @@ public class MinigameManager : MonoBehaviour
         }
     }
 
+    public float IncreaseDiffInterval = 20.0f;
+    private float increaseDiffIntervalElapsed = 0.0f;
+
     #endregion
 
     #region Events
@@ -78,7 +81,18 @@ public class MinigameManager : MonoBehaviour
 	}
 	void Update () 
     {
-
+        this.increaseDiffIntervalElapsed += Time.deltaTime;
+        if(this.increaseDiffIntervalElapsed > this.IncreaseDiffInterval)
+        {
+            this.increaseDiffIntervalElapsed = 0.0f;
+            if(this.minigames != null)
+            {
+                for(int i = 0;i < this.minigames.Length;i++)
+                {
+                    this.minigames[i].IncreaseDiff();
+                }
+            }
+        }
     }
     void OnEnable()
     {

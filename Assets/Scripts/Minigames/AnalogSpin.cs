@@ -201,7 +201,7 @@ public class AnalogSpin : Minigame
             }
         }
     }
-    void IncreaseDiff()
+    public override void IncreaseDiff()
     {
         this.SpinTarget += this.SpintTargetIncrease;
         this.timeLength *= this.timeMultiplier;

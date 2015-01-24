@@ -59,6 +59,11 @@ public class Minigame : MonoBehaviour
         }
     }
 
+    public virtual void IncreaseDiff()
+    {
+
+    }
+
     protected void SelfDisable()
     {
         Invoke("MakeMeDisabled", 0.3f);

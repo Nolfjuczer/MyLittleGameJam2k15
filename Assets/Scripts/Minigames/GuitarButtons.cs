@@ -355,7 +355,7 @@ public class GuitarButtons : Minigame
         this.hitCountText.text = "" + value + " / " + this.hitCountTarget;
     }
 
-    void IncreaseDiff()
+    public override void IncreaseDiff()
     {
         this.buttonsSpeed *= this.speedMultiplier;
         this.timeInterval *= this.intervalMultiplier;
