@@ -18,17 +18,17 @@ public class DoorSpawner : MonoBehaviour {
         tmp = doors1[rand].gameObject;
         if(tmp.transform.rotation.z != 0.0f) tmp.GetComponent<SpriteRenderer>().sprite = Doors;
         else tmp.GetComponent<SpriteRenderer>().sprite = DoorsTurned;
-        //tmp.GetComponent<BoxCollider2D>().enabled = false;
+        tmp.GetComponent<BoxCollider2D>().enabled = false;
         rand = Random.Range(0, 2);
         tmp = doors2[rand].gameObject;
         if (tmp.transform.rotation.z !=0.0f) tmp.GetComponent<SpriteRenderer>().sprite = Doors;
         else tmp.GetComponent<SpriteRenderer>().sprite = DoorsTurned;
-        //tmp.GetComponent<BoxCollider2D>().enabled = false;
+        tmp.GetComponent<BoxCollider2D>().enabled = false;
         rand = Random.Range(0, 2);
         tmp = doors3[rand].gameObject;
         if (tmp.transform.rotation.z != 0.0f) tmp.GetComponent<SpriteRenderer>().sprite = Doors;
         else tmp.GetComponent<SpriteRenderer>().sprite = DoorsTurned;
-        //tmp.GetComponent<BoxCollider2D>().enabled = false;
+        tmp.GetComponent<BoxCollider2D>().enabled = false;
 
 	}
 	
