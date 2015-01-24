@@ -98,7 +98,7 @@ public class AnalogSpin : Minigame
                     NotifyOnMinigameWin();
                     this.BackgroundImage.color = this.color_win;
                     this.minigamPaused = true;
-                    IncreaseDiff();
+                    //IncreaseDiff();
                 }
             }
             else
@@ -108,7 +108,7 @@ public class AnalogSpin : Minigame
                     NotifyOnMinigameWin();
                     this.BackgroundImage.color = this.color_win;
                     this.minigamPaused = true;
-                    IncreaseDiff();
+                    //IncreaseDiff();
                 }
             }
 
