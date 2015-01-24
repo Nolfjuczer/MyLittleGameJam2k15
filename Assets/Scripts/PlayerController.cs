@@ -10,23 +10,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(Input.GetAxis("Vertical")>0.0f)
-        {
-            this.transform.position += new Vector3(0.0f, 0.05f, 0.0f);
-        }
-        if(Input.GetAxis("Vertical")<0.0f)
-        {
-            this.transform.position += new Vector3(0.0f, -0.05f, 0.0f);
-        }
-        if (Input.GetAxis("Horizontal") > 0.0f)
-        {
-            this.transform.position += new Vector3(0.05f, 0.0f, 0.0f);
-        }
-        if (Input.GetAxis("Horizontal") < 0.0f)
-        {
-            this.transform.position += new Vector3(-0.05f, 0.0f, 0.0f);
-        }
-
-	
+        //Debug.Log("Vertical " + Input.GetAxis("Vertical"));
+        this.transform.position += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f).normalized * Time.deltaTime * 4.0f;
 	}
 }
