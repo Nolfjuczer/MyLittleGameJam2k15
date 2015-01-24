@@ -34,6 +34,18 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public DeviceController DeviceController;
     public int FixedItems;
+    public int DevicesCounter;
+
+    public void SomethingFixed()
+    {
+
+    }
+
+    public void SomethingNotFixed()
+    {
+
+    }
 
 }
