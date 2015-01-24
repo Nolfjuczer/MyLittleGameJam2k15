@@ -3,9 +3,11 @@ using System.Collections;
 
 public class Device : MonoBehaviour {
 
+    public ParticleSystem[] Particles = new ParticleSystem[2];
+
     private bool isWorking;
 
-    private GameObject player;
+    private float timerWhenCollided;
 
     public bool IsWorking
     {
@@ -19,46 +21,70 @@ public class Device : MonoBehaviour {
         }
     }
 
+    void Awake()
+    {
+        isWorking = true;
+        for(int i =0;i<Particles.Length;i++)
+        {
+            Particles[i].enableEmission = false;
+        }
+        
+    }
+
 	// Use this for initialization
 	void Start () {
-        isWorking = false;
+       
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	    
 	}
+    
+    public void FixDevice()
+    {
+        for (int i = 0; i < Particles.Length; i++)
+        {
+            Particles[i].enableEmission = false;
+        }
+        isWorking = true;
+    }
+
+    public void DestroyDevice()
+    {
+        for (int i = 0; i < Particles.Length; i++)
+        {
+            Particles[i].enableEmission = true;
+        }
+        isWorking = false;
+    }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Player" && !isWorking)
+        if (col.gameObject.tag == "Player" && !isWorking && Time.time - timerWhenCollided > 2.0f)
         {
+            timerWhenCollided = Time.time;
             MinigameManager.LaunchMinigame();
             MinigameManager.OnMinigameWin += Win;
             MinigameManager.OnMinigameLost += Lose;
-            player = col.gameObject;
-            //player.GetComponent<PlayerController>()
         }
     }
 
     void Win()
     {
-        isWorking = true;
         GameController.Instance.FixedItems += 1;
         GameController.Instance.DeviceController.SomethingFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
-        //player.GetComponent<PlayerController>().enabled = true;
-        player = null;
+        FixDevice();
+
     }
 
     void Lose()
     {
-        isWorking = false;
         GameController.Instance.DeviceController.SomethingNotFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
-        //player.GetComponent<PlayerController>().enabled = true;
-        player = null;
+        DestroyDevice();
     }
 }
