@@ -25,7 +25,7 @@ public class DeviceController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if(!GameController.Instance.GameOver)
-        {
+        {           
             int tmpUpdate = 0;
             if (timeDestroyPeriod > 10.0f) timeDestroyPeriod -= Time.deltaTime / 10.0f;
             if (Time.time - timeWhenDestroyed > timeDestroyPeriod)
@@ -42,6 +42,10 @@ public class DeviceController : MonoBehaviour {
 	    
 	}
 
+    public void UsedJoint()
+    {
+        timeWhenDestroyed = Time.time;
+    }
 
     public void SomethingFixed()
     {

@@ -41,6 +41,24 @@ public class Device : MonoBehaviour {
 	    
 	}
     
+    private void SpawnPowerUp()
+    {
+        int rand = Random.Range(0, 3);
+        switch(rand)
+        {
+            case 1:
+            {
+                GameObject pUP = PowerUpManager.GetNewPowerUp();
+                pUP.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -0.5f) +(this.transform.up * -1.28f);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+
     public void FixDevice()
     {
         for (int i = 0; i < Particles.Length; i++)
@@ -48,6 +66,7 @@ public class Device : MonoBehaviour {
             Particles[i].enableEmission = false;
         }
         isWorking = true;
+        SpawnPowerUp();
     }
 
     public void DestroyDevice()
@@ -61,7 +80,7 @@ public class Device : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Player" && !isWorking && Time.time - timerWhenCollided > 2.0f)
+        if (col.gameObject.tag == "Player" && !isWorking && Time.time - timerWhenCollided > 1.0f)
         {
             timerWhenCollided = Time.time;
             MinigameManager.LaunchMinigame();
@@ -77,6 +96,7 @@ public class Device : MonoBehaviour {
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
         FixDevice();
+        
 
     }
 

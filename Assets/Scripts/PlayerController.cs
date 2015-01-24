@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        if(!MinigameManager.IsMinigamePlaying)
+        if(!MinigameManager.IsMinigamePlaying && !GameController.Instance.GameOver)
         {
             Vector3 input = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
             this.transform.position += input.normalized * Time.deltaTime * MovementSpeed * input.magnitude * PowerUpManager.PillsSpeedMultiplier;

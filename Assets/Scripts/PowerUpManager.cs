@@ -25,7 +25,6 @@ public class PowerUpManager : MonoBehaviour
     private float defaultJointTimeSpeedMultiplier = 1.0f;
     public float fixedJointTimeSpeedMultiplier = 0.5f;
 
-
     private bool isPillsTime = false;
     public float pillsTimeLength = 10.0f;
     private float pillsTimeLeft = 0.0f;
@@ -37,6 +36,13 @@ public class PowerUpManager : MonoBehaviour
     [Space(10)]
     public GameObject[] boosts = null;
 
+    public static bool IsPilled
+    {
+        get
+        {
+            return PowerUpManager.entity.isPillsTime;
+        }
+    }
     public static float JointTimeSpeedMultiplier
     {
         get
@@ -104,6 +110,7 @@ public class PowerUpManager : MonoBehaviour
                 this._jointTimeSpeedMultiplier = fixedJointTimeSpeedMultiplier;
                 this.jointTimeLeft = this.jointTimeLength;
                 this.isJointTime = true;
+                GameController.Instance.DeviceController.UsedJoint();
                 break;
             case PowerUpType.PU_DADS_WHISKEY:
                 this.hasDadsWhiskey = true;
@@ -126,7 +133,7 @@ public class PowerUpManager : MonoBehaviour
         }
         if(PowerUpManager.entity.boosts != null)
         {
-            if(index > 0 && index < PowerUpManager.entity.boosts.Length)
+            if(index >= 0 && index < PowerUpManager.entity.boosts.Length)
             {
                 tmpGO = (GameObject)GameObject.Instantiate(PowerUpManager.entity.boosts[index]);
             }
