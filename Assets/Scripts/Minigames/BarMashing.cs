@@ -9,6 +9,7 @@ public class BarMashing : Minigame
 
     public Slider mashBar = null;
     public Image[] images = null;
+    public Image background = null;
 
     [Header("Value Tweaking")]
     [Space(20)]
@@ -20,6 +21,10 @@ public class BarMashing : Minigame
 
     public float pulseRatio = 1.0f;
 
+    private bool minigamePaused = false;
+    private Color backgroundColorDefault = new Color(1.0f,1.0f,1.0f,0.4f);
+    private Color backgroundColorLost = new Color(1.0f, 0.1f, 0.1f, 0.4f);
+    private Color backgroundColorWin = new Color(0.1f, 1.0f, 0.1f, 0.4f);
 
     #endregion
 
@@ -35,54 +40,58 @@ public class BarMashing : Minigame
 
 	void Update () 
     {
-        if(this.mashBar != null)
+        if (!this.minigamePaused)
         {
-            float value = this.mashBar.value;
-            value += Time.deltaTime * this.growRatio;
-            this.mashBar.value = value;
-        }
-        if(this.images != null)
-        {
-            for(int i = 0;i < this.images.Length;i++)
+            if (this.mashBar != null)
             {
-                Color tmpColor = this.images[i].color;
-                tmpColor.a =  (1 + Mathf.Sin(Time.time * pulseRatio)) / 2;
-                this.images[i].color = tmpColor;
+                float value = this.mashBar.value;
+                value += Time.deltaTime * this.growRatio;
+                this.mashBar.value = value;
             }
-        }
-        if (Input.GetAxis("Fire1") < 0.05f && this.mashLock)
-        {
-            this.mashLock = false;
-        }
-        
-        if(Input.GetAxis("Fire1") > 0.05f && !this.mashLock)
-        {
-            float value = this.mashBar.value;
-            value -= this.mashValue;
-            this.mashBar.value = value;
+            if (this.images != null)
+            {
+                for (int i = 0; i < this.images.Length; i++)
+                {
+                    Color tmpColor = this.images[i].color;
+                    tmpColor.a = (1 + Mathf.Sin(Time.time * pulseRatio)) / 2;
+                    this.images[i].color = tmpColor;
+                }
+            }
+            if (Input.GetAxis("Fire1") < 0.05f && this.mashLock)
+            {
+                this.mashLock = false;
+            }
 
-            this.mashLock = true;
-        }
+            if (Input.GetAxis("Fire1") > 0.05f && !this.mashLock)
+            {
+                float value = this.mashBar.value;
+                value -= this.mashValue;
+                this.mashBar.value = value;
 
+                this.mashLock = true;
+            }
 
-        if(this.mashBar.value <= 0.0f)
-        {
-            NotifyOnMinigameWin();
-        }
-        if (this.mashBar.value >= 1.0f)
-        {
-            NotifyOnMinigameLost();
+            if (this.mashBar.value <= 0.0f)
+            {
+                NotifyOnMinigameWin();
+                this.minigamePaused = true;
+                this.background.color = this.backgroundColorWin;
+            }
+            if (this.mashBar.value >= 1.0f)
+            {
+                NotifyOnMinigameLost();
+                this.minigamePaused = true;
+                this.background.color = this.backgroundColorLost;
+
+            }
         }
     }
     
     void OnEnable()
     {
-        if(this.mashBar != null)
-        {
-            this.mashBar.value = initialProgres;
-        }
         this.OnMinigameWin += SelfDisable;
         this.OnMinigameLost += SelfDisable;
+        ResetMinigame();
     }
     void OnDisable()
     {
@@ -92,5 +101,17 @@ public class BarMashing : Minigame
     #endregion
 
     #region Methods
+
+    void ResetMinigame()
+    {
+        if (this.mashBar != null)
+        {
+            this.mashBar.value = initialProgres;
+        }
+        this.minigamePaused = false;
+        this.background.color = this.backgroundColorDefault;
+    }
+    
+
     #endregion
 }
