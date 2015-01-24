@@ -35,7 +35,6 @@ public class AnalogSpin : Minigame
     public float timeMultiplier = 0.9f;
     public int SpinTarget = 5;
     public int SpintTargetIncrease = 1;
-    private int SpinCount = 0;
 
     private int lastDir = -1;
 
@@ -57,6 +56,8 @@ public class AnalogSpin : Minigame
 
     private int direction = -1;
 
+    private bool shouldIncreaseDiff = false;
+
     #endregion
 
 
@@ -69,7 +70,7 @@ public class AnalogSpin : Minigame
     {
 	    if(!this.minigamPaused)
         {
-            this.timeElapsed += Time.deltaTime;
+            this.timeElapsed += Time.deltaTime * MinigameManager.TimeMultiplier;
             //Input.GetAxis("Vertical2")
             Vector3 dir = new Vector3(Input.GetAxis("Horizontal2"), Input.GetAxis("Vertical2"), 0.0f).normalized;
             Vector3 pos = dir * 80.0f;
@@ -118,7 +119,9 @@ public class AnalogSpin : Minigame
                 NotifyOnMinigameLost();
                 this.BackgroundImage.color = this.color_lost;
                 this.minigamPaused = true;
-                IncreaseDiff();
+
+                this.shouldIncreaseDiff = true;
+                //IncreaseDiff();
             }
 
 
@@ -168,6 +171,12 @@ public class AnalogSpin : Minigame
 
     void ResetMinigame()
     {
+        if(this.shouldIncreaseDiff)
+        {
+            this.shouldIncreaseDiff = false;
+            IncreaseDiff();
+        }
+
         this.minigamPaused = false;
         this.rotateRightCounter = 0;
         this.rotateLeftCounter = 0;

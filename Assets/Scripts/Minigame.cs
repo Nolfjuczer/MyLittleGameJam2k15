@@ -46,9 +46,16 @@ public class Minigame : MonoBehaviour
     }
     public void NotifyOnMinigameLost()
     {
-        if (this.OnMinigameLost != null)
+        if(!PowerUpManager.CanLostMiniGame())
         {
-            this.OnMinigameLost();
+            if (this.OnMinigameLost != null)
+            {
+                this.OnMinigameLost();
+            }
+        }
+        else
+        {
+            NotifyOnMinigameWin();
         }
     }
 

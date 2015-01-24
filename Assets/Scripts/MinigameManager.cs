@@ -13,6 +13,16 @@ public class MinigameManager : MonoBehaviour
 
     private bool _isMinigamePlaying = false;
 
+    //private float defaultTimeMultipler = 1.0f;
+    private float _timeMultipler = 1.0f;
+    public static float TimeMultiplier
+    {
+        get
+        {
+            return MinigameManager.entity._timeMultipler;
+        }
+    }
+
     #endregion
 
     #region Events
@@ -126,8 +136,8 @@ public class MinigameManager : MonoBehaviour
             if (index >= 0 && index < this.minigames.Length)
             {
                 this.minigames[index].gameObject.SetActive(true);
-                this.minigames[index].OnMinigameWin += this._onMinigameWin;
-                this.minigames[index].OnMinigameLost += this._onMinigameLost;
+                this.minigames[index].OnMinigameWin += this.WinHandler;
+                this.minigames[index].OnMinigameLost += this.LostHandler;
             }
         }
     }
@@ -149,6 +159,19 @@ public class MinigameManager : MonoBehaviour
     void MinigameEndHandler()
     {
         this._isMinigamePlaying = false;
+    }
+
+    void WinHandler()
+    {
+        NotifyOnMinigameWin();
+        this.minigames[this.lastMinigameindex].OnMinigameWin -= WinHandler;
+        this.minigames[this.lastMinigameindex].OnMinigameLost -= LostHandler;
+    }
+    void LostHandler()
+    {
+        NotifyOnMinigameLost();
+        this.minigames[this.lastMinigameindex].OnMinigameWin -= WinHandler;
+        this.minigames[this.lastMinigameindex].OnMinigameLost -= LostHandler;
     }
 
     #endregion
