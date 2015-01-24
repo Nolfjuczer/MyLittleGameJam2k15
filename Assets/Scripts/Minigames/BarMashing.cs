@@ -25,9 +25,9 @@ public class BarMashing : Minigame
     public float pulseRatio = 1.0f;
 
     private bool minigamePaused = false;
-    private Color backgroundColorDefault = new Color(1.0f,1.0f,1.0f,0.4f);
-    private Color backgroundColorLost = new Color(1.0f, 0.1f, 0.1f, 0.4f);
-    private Color backgroundColorWin = new Color(0.1f, 1.0f, 0.1f, 0.4f);
+    private Color backgroundColorDefault = new Color(1.0f,1.0f,1.0f,0.6f);
+    private Color backgroundColorLost = new Color(1.0f, 0.1f, 0.1f, 0.6f);
+    private Color backgroundColorWin = new Color(0.1f, 1.0f, 0.1f, 0.6f);
 
     private bool shouldIncreaseDiff = false;
 
