@@ -16,4 +16,15 @@ public class DeviceController : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+    public void SomethingFixed()
+    {
+
+    }
+
+    public void SomethingNotFixed()
+    {
+
+    }
 }

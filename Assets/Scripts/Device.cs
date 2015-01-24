@@ -45,7 +45,7 @@ public class Device : MonoBehaviour {
     {
         isWorking = true;
         GameController.Instance.FixedItems += 1;
-        GameController.Instance.SomethingFixed();
+        GameController.Instance.DeviceController.SomethingFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
         player.GetComponent<PlayerController>().enabled = true;
@@ -55,7 +55,7 @@ public class Device : MonoBehaviour {
     void Lose()
     {
         isWorking = false;
-        GameController.Instance.SomethingNotFixed();
+        GameController.Instance.DeviceController.SomethingNotFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;
         player.GetComponent<PlayerController>().enabled = true;
