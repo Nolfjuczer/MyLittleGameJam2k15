@@ -55,6 +55,8 @@ public class GuitarButtons : Minigame
     public int hitCountTarget = 5;
     public int hitCountLost = -5;
     public int hitCountLevelAmount = 1;
+    public float speedMultiplier = 1.1f;
+    public float intervalMultiplier = 0.9f;
 
     private bool lock_fire1 = false;
     private bool lock_fire2 = false;
@@ -105,8 +107,6 @@ public class GuitarButtons : Minigame
     {
         if (!this.minigamePaused)
         {
-
-
             this.timeElapsed += Time.deltaTime;
             this.timeIntervalElapsed += Time.deltaTime;
             this.effectTimeElapsed += Time.deltaTime;
@@ -203,6 +203,7 @@ public class GuitarButtons : Minigame
             if (this.buttonHitCount >= this.hitCountTarget)
             {
                 NotifyOnMinigameWin();
+                IncreaseDiff();
             }
         }
 	}
@@ -303,7 +304,6 @@ public class GuitarButtons : Minigame
     void Hit()
     {
         this.buttonHitCount++;
-        Debug.Log("hit");
         this.areEffectsOn = true;
         this.effectTimeElapsed = 0.0f;
 
@@ -323,7 +323,7 @@ public class GuitarButtons : Minigame
     void Miss()
     {
         OnMinigameLost();
-        Debug.Log("Miss");
+        IncreaseDiff();
 
         this.areEffectsOn = true;
         this.effectTimeElapsed = 0.0f;
@@ -344,5 +344,12 @@ public class GuitarButtons : Minigame
     void HitCountHandler(int value)
     {
         this.hitCountText.text = "" + value + " / " + this.hitCountTarget;
+    }
+
+    void IncreaseDiff()
+    {
+        this.buttonsSpeed *= this.speedMultiplier;
+        this.timeInterval *= this.intervalMultiplier;
+        this.hitCountTarget += this.hitCountLevelAmount;
     }
 }

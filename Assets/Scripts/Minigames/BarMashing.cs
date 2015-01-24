@@ -19,6 +19,9 @@ public class BarMashing : Minigame
     public float mashValue = 0.33f;
     private bool mashLock = false;
 
+    public float mashValueMultiplier = 0.9f;
+    public float growRationMultiplier = 1.1f;
+
     public float pulseRatio = 1.0f;
 
     private bool minigamePaused = false;
@@ -76,13 +79,14 @@ public class BarMashing : Minigame
                 NotifyOnMinigameWin();
                 this.minigamePaused = true;
                 this.background.color = this.backgroundColorWin;
+                IncreadeDiff();
             }
             if (this.mashBar.value >= 1.0f)
             {
                 NotifyOnMinigameLost();
                 this.minigamePaused = true;
                 this.background.color = this.backgroundColorLost;
-
+                IncreadeDiff();
             }
         }
     }
@@ -111,7 +115,11 @@ public class BarMashing : Minigame
         this.minigamePaused = false;
         this.background.color = this.backgroundColorDefault;
     }
-    
+    void IncreadeDiff()
+    {
+        this.mashValue *= this.mashValueMultiplier;
+        this.growRatio *= this.growRationMultiplier;
+    }
 
     #endregion
 }
