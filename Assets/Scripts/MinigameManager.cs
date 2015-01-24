@@ -81,15 +81,18 @@ public class MinigameManager : MonoBehaviour
 	}
 	void Update () 
     {
-        this.increaseDiffIntervalElapsed += Time.deltaTime;
-        if(this.increaseDiffIntervalElapsed > this.IncreaseDiffInterval)
+        if (!MinigameManager.IsMinigamePlaying)
         {
-            this.increaseDiffIntervalElapsed = 0.0f;
-            if(this.minigames != null)
+            this.increaseDiffIntervalElapsed += Time.deltaTime;
+            if (this.increaseDiffIntervalElapsed > this.IncreaseDiffInterval)
             {
-                for(int i = 0;i < this.minigames.Length;i++)
+                this.increaseDiffIntervalElapsed = 0.0f;
+                if (this.minigames != null)
                 {
-                    this.minigames[i].IncreaseDiff();
+                    for (int i = 0; i < this.minigames.Length; i++)
+                    {
+                        this.minigames[i].IncreaseDiff();
+                    }
                 }
             }
         }

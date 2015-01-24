@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PowerUpManager : MonoBehaviour 
 {
@@ -15,6 +16,8 @@ public class PowerUpManager : MonoBehaviour
 
     private bool hasDadsWhiskey = false;
 
+    [Header("Boosts parameters")]
+    [Space(10)]
     private bool isJointTime = false;
     public float jointTimeLength = 10.0f;
     private float jointTimeLeft = 0.0f;
@@ -29,6 +32,10 @@ public class PowerUpManager : MonoBehaviour
     private float _pillsSpeedMultiplier = 1.0f;
     private float defaultPillsSpeedMultiplier = 1.0f;
     private float fixedPillsSpeedMultiplier = 2.0f;
+
+    [Header("Boosts GOs")]
+    [Space(10)]
+    public GameObject[] boosts = null;
 
     public static float JointTimeSpeedMultiplier
     {
@@ -108,5 +115,22 @@ public class PowerUpManager : MonoBehaviour
                 break;
         }
     }
-   
+
+    public static GameObject GetNewPowerUp(int index = -1)
+    {
+        GameObject tmpGO = null;
+        if(index == -1)
+        {
+            System.Random rand = new System.Random();
+            index = rand.Next(0, PowerUpManager.entity.boosts.Length);
+        }
+        if(PowerUpManager.entity.boosts != null)
+        {
+            if(index > 0 && index < PowerUpManager.entity.boosts.Length)
+            {
+                tmpGO = (GameObject)GameObject.Instantiate(PowerUpManager.entity.boosts[index]);
+            }
+        }
+        return tmpGO;
+    }
 }
