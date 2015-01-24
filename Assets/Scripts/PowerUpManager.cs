@@ -63,7 +63,7 @@ public class PowerUpManager : MonoBehaviour
         if(this.isPillsTime)
         {
             this.pillsTimeLeft -= Time.deltaTime;
-            if(this.jointTimeLeft <= 0.0f)
+            if (this.pillsTimeLeft <= 0.0f)
             {
                 this._pillsSpeedMultiplier = defaultPillsSpeedMultiplier;
                 this.isPillsTime = false;
@@ -103,7 +103,7 @@ public class PowerUpManager : MonoBehaviour
                 break;
             case PowerUpType.PU_PILLS:
                 this._pillsSpeedMultiplier = fixedPillsSpeedMultiplier;
-                this.jointTimeLeft = this.jointTimeLength;
+                this.pillsTimeLeft = this.pillsTimeLength;
                 this.isPillsTime = true;
                 break;
         }
