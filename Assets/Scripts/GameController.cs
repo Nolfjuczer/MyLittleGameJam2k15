@@ -34,9 +34,28 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    void Update()
+    {
+        int counter = 0;
+        foreach(GameObject device in DeviceController.Devices)
+        {
+            if (!device.GetComponent<Device>().IsWorking) counter += 1;
+        }
+        if(counter == DevicesCounter)
+        {
+            GameOver = true;
+        }
+        if (GameOver) 
+        { 
+            Debug.Log("Przegrałeś");
+            Debug.Break();
+        }
+    }
+
     public DeviceController DeviceController;
     public int FixedItems;
     public int DevicesCounter;
+    public bool GameOver = false;
 
 
 }

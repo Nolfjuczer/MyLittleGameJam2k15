@@ -56,6 +56,7 @@ public class Device : MonoBehaviour {
         {
             Particles[i].enableEmission = true;
         }
+        Debug.Log("Jebie się");
         isWorking = false;
     }
 

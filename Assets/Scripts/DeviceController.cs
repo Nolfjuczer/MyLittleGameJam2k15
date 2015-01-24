@@ -8,80 +8,89 @@ public class DeviceController : MonoBehaviour {
 
     private float timeWhenDestroyed;
     private float timeDestroyPeriod;
-    private int rand = 0;
-    private int tmpUpdate = 0;
 
 	// Use this for initialization
 	void Start () {
         if (Devices.Count != GameController.Instance.DevicesCounter) Debug.Break();
         for(int i = 0; i<3 ; i++)
         {
-            rand = Random.Range(0, Devices.Count);
+            int rand = Random.Range(0, Devices.Count);
             Devices[rand].GetComponent<Device>().DestroyDevice(); ;
         }
         timeDestroyPeriod = 20.0f;
-        timeWhenDestroyed = 30.0f;
+        timeWhenDestroyed = 10.0f;
+ 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log("DestroyPeriod= " + timeDestroyPeriod);
-        if (timeDestroyPeriod > 10.0f) timeDestroyPeriod -= Time.deltaTime / 10.0f;
-        if(Time.time - timeWhenDestroyed > timeDestroyPeriod)
+        if(!GameController.Instance.GameOver)
         {
-            do
+            int tmpUpdate = 0;
+            if (timeDestroyPeriod > 10.0f) timeDestroyPeriod -= Time.deltaTime / 10.0f;
+            if (Time.time - timeWhenDestroyed > timeDestroyPeriod)
             {
-                tmpUpdate = Random.Range(0, Devices.Count);
-            } while (Devices[tmpUpdate].GetComponent<Device>().IsWorking);
-            timeWhenDestroyed = Time.time;
-            Devices[tmpUpdate].GetComponent<Device>().DestroyDevice();
+                do
+                {
+                    tmpUpdate = Random.Range(0, Devices.Count);
+                } while (!Devices[tmpUpdate].GetComponent<Device>().IsWorking);
+                timeWhenDestroyed = Time.time;
+                Devices[tmpUpdate].GetComponent<Device>().DestroyDevice();
+            }
         }
+
 	    
 	}
 
 
     public void SomethingFixed()
     {
-        rand = Random.Range(0, 2);
-        switch(rand)
+        if (!GameController.Instance.GameOver)
         {
-            case 0:
+            int rand = Random.Range(0, 2);
+            switch (rand)
             {
-                break;
-            }
-            case 1:
-            {
-                int tmp = 0;
-                do
-                {
-                    tmp = Random.Range(0, Devices.Count); 
-                } while (Devices[tmp].GetComponent<Device>().IsWorking);
-                Devices[tmp].GetComponent<Device>().DestroyDevice();
-                break;
-            }
-            case 2:
-            {
-                int tmp = 0;
-                for (int i = 0; i < 2; i++)
-                {
-                    do
+                case 0:
                     {
-                        tmp = Random.Range(0, Devices.Count);
-                    } while (Devices[tmp].GetComponent<Device>().IsWorking);
-                    Devices[tmp].GetComponent<Device>().DestroyDevice();
-                }
-                break;
+                        break;
+                    }
+                case 1:
+                    {
+                        int tmp = 0;
+                        do
+                        {
+                            tmp = Random.Range(0, Devices.Count);
+                        } while (!Devices[tmp].GetComponent<Device>().IsWorking);
+                        Devices[tmp].GetComponent<Device>().DestroyDevice();
+                        break;
+                    }
+                case 2:
+                    {
+                        int tmp = 0;
+                        for (int i = 0; i < 2; i++)
+                        {
+                            do
+                            {
+                                tmp = Random.Range(0, Devices.Count);
+                            } while (!Devices[tmp].GetComponent<Device>().IsWorking);
+                            Devices[tmp].GetComponent<Device>().DestroyDevice();
+                        }
+                        break;
+                    }
             }
         }
     }
 
     public void SomethingNotFixed()
     {
-        int tmp = 0;
-        do
+        if (!GameController.Instance.GameOver)
         {
-            tmp = Random.Range(0, Devices.Count);
-        } while (Devices[tmp].GetComponent<Device>().IsWorking);
-        Devices[tmp].GetComponent<Device>().DestroyDevice() ;
+            int tmp = 0;
+            do
+            {
+                tmp = Random.Range(0, Devices.Count);
+            } while (Devices[tmp].GetComponent<Device>().IsWorking);
+            Devices[tmp].GetComponent<Device>().DestroyDevice();
+        }
     }
 }
