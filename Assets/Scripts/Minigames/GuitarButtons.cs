@@ -47,11 +47,11 @@ public class GuitarButtons : Minigame
 
     private float timeElapsed = 0.0f;
     private float timeIntervalElapsed = 0.0f;
-    public float timeInterval = 1.0f;
-    public float buttonsSpeed = 1.0f;
 
     [Header("Win Lost Params")]
     [Space(10)]
+    public float timeInterval = 1.0f;
+    public float buttonsSpeed = 1.0f;
     public int hitCountTarget = 5;
     public int hitCountLost = -5;
     public int hitCountLevelAmount = 1;

@@ -28,8 +28,10 @@ public class AnalogSpin : Minigame
     private Color color_win = new Color(0.0f, 1.0f, 0.0f, 0.4f);
     private Color color_lost = new Color(1.0f, 0.0f, 0.0f, 0.4f);
 
+    [Header("Parameters")]
+    [Space(10)]
     public float timeLength = 5.0f;
-    public float timeElapsed = 0.0f;
+    private float timeElapsed = 0.0f;
     public float timeMultiplier = 0.9f;
     public int SpinTarget = 5;
     public int SpintTargetIncrease = 1;
