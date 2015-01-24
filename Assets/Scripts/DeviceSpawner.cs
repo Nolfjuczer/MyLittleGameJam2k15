@@ -5,15 +5,16 @@ public class DeviceSpawner : MonoBehaviour {
 
     public GameObject[] Slots = new GameObject[3];
 
-    private GameObject device1;
-    private GameObject device2;
+
 
 	// Use this for initialization
 
     void Awake()
     {
-        device1 = transform.parent.GetComponentInChildren<RoomDeviceController>().Device1;
-        device2 = transform.parent.GetComponentInChildren<RoomDeviceController>().Device2;
+        GameObject device1;
+        GameObject device2;
+        device1 = transform.GetComponentInChildren<RoomDeviceController>().Device1;
+        device2 = transform.GetComponentInChildren<RoomDeviceController>().Device2;
         int rand1 = Random.Range(0, 3);
         GameObject dev1 = (GameObject)Instantiate(device1, Slots[rand1].gameObject.transform.position, Slots[rand1].gameObject.transform.rotation);
         DeviceController.Devices.Add(dev1);
