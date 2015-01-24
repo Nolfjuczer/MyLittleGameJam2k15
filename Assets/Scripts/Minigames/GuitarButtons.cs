@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class GuitarButtons : Minigame 
 {
@@ -17,23 +18,58 @@ public class GuitarButtons : Minigame
 
     public GameObject buttonsLine = null;
 
-    public float buttonsSpeed = 0.75f;
 
     public Vector3 StartPos = Vector3.zero;
     public Vector3 EndPos = Vector3.zero;
 
     public Image backgroundImage = null;
+    public Image frameImage = null;
 
     private List<Button> buttonsProcessed = new List<Button>();
 
     [Header("Params")]
     [Space(10)]
-    public int buttonPressAmount = 4;
-    public int buttonPressCount = 0;
+    public int buttonHitTarger = 4;
+    public int buttonHitCount = 0;
     private float timeElapsed = 0.0f;
     private float timeIntervalElapsed = 0.0f;
-    private float timeInterval = 0.75f;
-    
+    public float timeInterval = 1.0f;
+    public float buttonsSpeed = 1.0f;
+
+    private bool lock_fire1 = false;
+    private bool lock_fire2 = false;
+    private bool lock_fire3 = false;
+    private bool lock_fire4 = false;
+
+    [Header("ButtonHitFrame")]
+    [Space(10)]
+    public float frameMin = 0.4f;
+    public float frameMax = 0.6f;
+
+    private bool areEffectsOn = false;
+    private float effectLength = 0.3f;
+    private float effectTimeElapsed =0.0f;
+    private Color delaultColorBackground = new Color(1.0f, 1.0f, 0.0f, 0.6f);
+    private Color delaultColorFrame = new Color(0.4f, 0.4f, 0.4f, 1.0f);
+
+    public Action OnGuitarButtonHit;
+    public Action OnGuitarButtonMiss;
+
+    void NotifyOnGuitarButtonHit()
+    {
+        if (this.OnGuitarButtonHit != null)
+        {
+            this.OnGuitarButtonHit();
+        }
+    }
+    void NotifyOnGuitarButtonMiss()
+    {
+        if (this.OnGuitarButtonMiss != null)
+        {
+            this.OnGuitarButtonMiss();
+        }
+    }
+
     void Start () 
     {
         
@@ -42,6 +78,14 @@ public class GuitarButtons : Minigame
     {
         this.timeElapsed += Time.deltaTime;
         this.timeIntervalElapsed += Time.deltaTime;
+        this.effectTimeElapsed += Time.deltaTime;
+
+        if(this.effectTimeElapsed > this.effectLength && this.areEffectsOn)
+        {
+            this.backgroundImage.color = this.delaultColorBackground;
+            this.frameImage.color = this.delaultColorFrame;
+            this.areEffectsOn = false;
+        }
 
         if (this.buttonsProcessed != null)
         {
@@ -54,7 +98,8 @@ public class GuitarButtons : Minigame
                 this.buttonsProcessed[i].rectTransform.localPosition = pos;
 
                 Color tmpColor = this.buttonsProcessed[i].image.color;
-                //tmpColor.a = 
+                tmpColor.a = Mathf.Sin(this.buttonsProcessed[i].progres * Mathf.PI);
+                this.buttonsProcessed[i].image.color = tmpColor;
             }
         }
 
@@ -72,7 +117,70 @@ public class GuitarButtons : Minigame
                 i--;
             }
         }
+
+        if (Input.GetAxis("Fire1") < 0.05f && this.lock_fire1)
+        {
+            this.lock_fire1 = false;
+        }
+        if(Input.GetAxis("Fire1") > 0.05f && !this.lock_fire1)
+        {
+            this.lock_fire1 = true;
+            CheckButtonPressed(button_A);
+        }
+
+
+        if (Input.GetAxis("Fire2") < 0.05f && this.lock_fire2)
+        {
+            this.lock_fire2 = false;
+        }
+        if (Input.GetAxis("Fire2") > 0.05f && !this.lock_fire2)
+        {
+            this.lock_fire2 = true;
+            CheckButtonPressed(button_B);
+        }
+
+        if (Input.GetAxis("Fire3") < 0.05f && this.lock_fire3)
+        {
+            this.lock_fire3 = false;
+        }
+        if (Input.GetAxis("Fire3") > 0.05f && !this.lock_fire3)
+        {
+            this.lock_fire3 = true;
+            CheckButtonPressed(button_X);
+        }
+
+        if (Input.GetAxis("Fire4") < 0.05f && this.lock_fire4)
+        {
+            this.lock_fire4 = false;
+        }
+        if (Input.GetAxis("Fire4") > 0.05f && !this.lock_fire4)
+        {
+            this.lock_fire4 = true;
+            CheckButtonPressed(button_Y);
+        }
+        
 	}
+
+    void CheckButtonPressed(int type)
+    {
+        if(this.buttonsProcessed != null)
+        {
+            bool wasAnythingHit = false;
+            for(int i = 0;i < this.buttonsProcessed.Count;i++)
+            {
+                if(this.buttonsProcessed[i].progres >= this.frameMin && this.buttonsProcessed[i].progres <= frameMax && this.buttonsProcessed[i].type == type)
+                {
+                    wasAnythingHit = true;
+                    NotifyOnGuitarButtonHit();
+                }
+            }
+            if(!wasAnythingHit)
+            {
+                NotifyOnGuitarButtonMiss();
+            }
+        }
+    }
+
 
     void AddButton(int type = -1)
     {
@@ -111,7 +219,7 @@ public class GuitarButtons : Minigame
 
     void ResetMinigame()
     {
-        this.buttonPressCount = 0;
+        this.buttonHitCount = 0;
         this.timeElapsed = 0.0f;
         timeIntervalElapsed = 0.0f;
         for (int i = 0; i < this.buttonsProcessed.Count; i++)
@@ -129,10 +237,55 @@ public class GuitarButtons : Minigame
         ResetMinigame();
         this.OnMinigameWin += SelfDisable;
         this.OnMinigameLost += SelfDisable;
+        this.OnGuitarButtonHit += Hit;
+        this.OnGuitarButtonMiss += Miss;
     }
     void OnDisable()
     {
         this.OnMinigameWin -= SelfDisable;
         this.OnMinigameLost -= SelfDisable;
+        this.OnGuitarButtonHit -= Hit;
+        this.OnGuitarButtonMiss -= Miss;
+    }
+
+    void Hit()
+    {
+        this.buttonHitCount++;
+        Debug.Log("hit");
+        this.areEffectsOn = true;
+        this.effectTimeElapsed = 0.0f;
+
+        Color tmpColor = this.backgroundImage.color;
+        float alpha = tmpColor.a;
+        tmpColor = Color.green;
+        tmpColor.a = alpha;
+        this.backgroundImage.color = tmpColor;
+
+        tmpColor = this.frameImage.color;
+        alpha = tmpColor.a;
+        tmpColor = Color.green;
+        tmpColor.a = alpha;
+        tmpColor *= 0.8f;
+        this.frameImage.color = tmpColor;
+    }
+    void Miss()
+    {
+        OnMinigameLost();
+        Debug.Log("Miss");
+
+        this.areEffectsOn = true;
+        this.effectTimeElapsed = 0.0f;
+
+        Color tmpColor = this.backgroundImage.color;
+        float alpha = tmpColor.a;
+        tmpColor = Color.red;
+        tmpColor.a = alpha;
+        this.backgroundImage.color = tmpColor;
+        tmpColor = this.frameImage.color;
+        alpha = tmpColor.a;
+        tmpColor = Color.red;
+        tmpColor.a = alpha;
+        tmpColor *= 0.8f;
+        this.frameImage.color = tmpColor;
     }
 }
