@@ -54,6 +54,10 @@ public class Minigame : MonoBehaviour
 
     protected void SelfDisable()
     {
+        Invoke("MakeMeDisabled", 0.3f);
+    }
+    private void MakeMeDisabled()
+    {
         this.OnMinigameWin = null;
         this.OnMinigameLost = null;
         this.gameObject.SetActive(false);

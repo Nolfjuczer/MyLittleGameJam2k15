@@ -18,4 +18,13 @@ public class Button : MonoBehaviour
     {
 	
 	}
+
+    public void SeldDestroy(float time = 0.0f)
+    {
+        Invoke("KillMe", time);
+    }
+    void KillMe()
+    {
+        GameObject.Destroy(this.gameObject);
+    }
 }

@@ -17,24 +17,44 @@ public class GuitarButtons : Minigame
     public GameObject GObuttonY = null;
 
     public GameObject buttonsLine = null;
-
+    private bool minigamePaused = false;
 
     public Vector3 StartPos = Vector3.zero;
     public Vector3 EndPos = Vector3.zero;
 
     public Image backgroundImage = null;
     public Image frameImage = null;
+    public Text hitCountText = null;
 
     private List<Button> buttonsProcessed = new List<Button>();
 
     [Header("Params")]
     [Space(10)]
-    public int buttonHitTarger = 4;
-    public int buttonHitCount = 0;
+    private int _buttonHitCount = 0;
+    public int buttonHitCount
+    {
+        get
+        {
+            return this._buttonHitCount;
+        }
+        set
+        {
+            this._buttonHitCount = value;
+            NotifyOnButtonHitCountValueChanged(this._buttonHitCount);
+        }
+    }
+    public Action<int> OnButtonHitCountValueChanged;
+
     private float timeElapsed = 0.0f;
     private float timeIntervalElapsed = 0.0f;
     public float timeInterval = 1.0f;
     public float buttonsSpeed = 1.0f;
+
+    [Header("Win Lost Params")]
+    [Space(10)]
+    public int hitCountTarget = 5;
+    public int hitCountLost = -5;
+    public int hitCountLevelAmount = 1;
 
     private bool lock_fire1 = false;
     private bool lock_fire2 = false;
@@ -69,6 +89,13 @@ public class GuitarButtons : Minigame
             this.OnGuitarButtonMiss();
         }
     }
+    void NotifyOnButtonHitCountValueChanged(int value)
+    {
+        if(this.OnButtonHitCountValueChanged != null)
+        {
+            this.OnButtonHitCountValueChanged(value);
+        }
+    }
 
     void Start () 
     {
@@ -76,89 +103,108 @@ public class GuitarButtons : Minigame
 	}
 	void Update () 
     {
-        this.timeElapsed += Time.deltaTime;
-        this.timeIntervalElapsed += Time.deltaTime;
-        this.effectTimeElapsed += Time.deltaTime;
-
-        if(this.effectTimeElapsed > this.effectLength && this.areEffectsOn)
+        if (!this.minigamePaused)
         {
-            this.backgroundImage.color = this.delaultColorBackground;
-            this.frameImage.color = this.delaultColorFrame;
-            this.areEffectsOn = false;
-        }
 
-        if (this.buttonsProcessed != null)
-        {
+
+            this.timeElapsed += Time.deltaTime;
+            this.timeIntervalElapsed += Time.deltaTime;
+            this.effectTimeElapsed += Time.deltaTime;
+
+            if (this.effectTimeElapsed > this.effectLength && this.areEffectsOn)
+            {
+                this.backgroundImage.color = this.delaultColorBackground;
+                this.frameImage.color = this.delaultColorFrame;
+                this.areEffectsOn = false;
+            }
+
+            if (this.buttonsProcessed != null)
+            {
+                for (int i = 0; i < this.buttonsProcessed.Count; i++)
+                {
+                    this.buttonsProcessed[i].progres += Time.deltaTime * buttonsSpeed;
+
+                    Vector3 pos = this.buttonsProcessed[i].rectTransform.localPosition;
+                    pos = Vector3.Lerp(this.StartPos, EndPos, this.buttonsProcessed[i].progres);
+                    this.buttonsProcessed[i].rectTransform.localPosition = pos;
+
+                    Color tmpColor = this.buttonsProcessed[i].image.color;
+                    tmpColor.a = Mathf.Sin(this.buttonsProcessed[i].progres * Mathf.PI);
+                    this.buttonsProcessed[i].image.color = tmpColor;
+                }
+            }
+
+            if (this.timeIntervalElapsed >= this.timeInterval)
+            {
+                this.timeIntervalElapsed -= this.timeInterval;
+                AddButton();
+            }
             for (int i = 0; i < this.buttonsProcessed.Count; i++)
             {
-                this.buttonsProcessed[i].progres += Time.deltaTime * buttonsSpeed;
-
-                Vector3 pos = this.buttonsProcessed[i].rectTransform.localPosition;
-                pos = Vector3.Lerp(this.StartPos, EndPos, this.buttonsProcessed[i].progres);
-                this.buttonsProcessed[i].rectTransform.localPosition = pos;
-
-                Color tmpColor = this.buttonsProcessed[i].image.color;
-                tmpColor.a = Mathf.Sin(this.buttonsProcessed[i].progres * Mathf.PI);
-                this.buttonsProcessed[i].image.color = tmpColor;
+                if (this.buttonsProcessed[i].progres >= 1.0f)
+                {
+                    
+                    this.buttonHitCount--;
+                    this.buttonsProcessed[i].image.color = Color.red;
+                    this.buttonsProcessed[i].SeldDestroy((1/this.buttonsSpeed) / 2);
+                    this.buttonsProcessed.RemoveAt(i);
+                    i--;
+                    if (this.buttonHitCount <= this.hitCountLost)
+                    {
+                        NotifyOnMinigameLost();
+                        this.minigamePaused = true;
+                    }
+                }
             }
-        }
 
-        if(this.timeIntervalElapsed >= this.timeInterval)
-        {
-            this.timeIntervalElapsed -= this.timeInterval;
-            AddButton();
-        }
-        for (int i = 0; i < this.buttonsProcessed.Count; i++)
-        {
-            if(this.buttonsProcessed[i].progres >= 1.0f)
+            if (Input.GetAxis("Fire1") < 0.05f && this.lock_fire1)
             {
-                GameObject.Destroy(this.buttonsProcessed[i].gameObject);
-                this.buttonsProcessed.RemoveAt(i);
-                i--;
+                this.lock_fire1 = false;
+            }
+            if (Input.GetAxis("Fire1") > 0.05f && !this.lock_fire1)
+            {
+                this.lock_fire1 = true;
+                CheckButtonPressed(button_A);
+            }
+
+
+            if (Input.GetAxis("Fire2") < 0.05f && this.lock_fire2)
+            {
+                this.lock_fire2 = false;
+            }
+            if (Input.GetAxis("Fire2") > 0.05f && !this.lock_fire2)
+            {
+                this.lock_fire2 = true;
+                CheckButtonPressed(button_B);
+            }
+
+            if (Input.GetAxis("Fire3") < 0.05f && this.lock_fire3)
+            {
+                this.lock_fire3 = false;
+            }
+            if (Input.GetAxis("Fire3") > 0.05f && !this.lock_fire3)
+            {
+                this.lock_fire3 = true;
+                CheckButtonPressed(button_X);
+            }
+
+            if (Input.GetAxis("Fire4") < 0.05f && this.lock_fire4)
+            {
+                this.lock_fire4 = false;
+            }
+            if (Input.GetAxis("Fire4") > 0.05f && !this.lock_fire4)
+            {
+                this.lock_fire4 = true;
+                CheckButtonPressed(button_Y);
+            }
+
+
+
+            if (this.buttonHitCount >= this.hitCountTarget)
+            {
+                NotifyOnMinigameWin();
             }
         }
-
-        if (Input.GetAxis("Fire1") < 0.05f && this.lock_fire1)
-        {
-            this.lock_fire1 = false;
-        }
-        if(Input.GetAxis("Fire1") > 0.05f && !this.lock_fire1)
-        {
-            this.lock_fire1 = true;
-            CheckButtonPressed(button_A);
-        }
-
-
-        if (Input.GetAxis("Fire2") < 0.05f && this.lock_fire2)
-        {
-            this.lock_fire2 = false;
-        }
-        if (Input.GetAxis("Fire2") > 0.05f && !this.lock_fire2)
-        {
-            this.lock_fire2 = true;
-            CheckButtonPressed(button_B);
-        }
-
-        if (Input.GetAxis("Fire3") < 0.05f && this.lock_fire3)
-        {
-            this.lock_fire3 = false;
-        }
-        if (Input.GetAxis("Fire3") > 0.05f && !this.lock_fire3)
-        {
-            this.lock_fire3 = true;
-            CheckButtonPressed(button_X);
-        }
-
-        if (Input.GetAxis("Fire4") < 0.05f && this.lock_fire4)
-        {
-            this.lock_fire4 = false;
-        }
-        if (Input.GetAxis("Fire4") > 0.05f && !this.lock_fire4)
-        {
-            this.lock_fire4 = true;
-            CheckButtonPressed(button_Y);
-        }
-        
 	}
 
     void CheckButtonPressed(int type)
@@ -172,6 +218,9 @@ public class GuitarButtons : Minigame
                 {
                     wasAnythingHit = true;
                     NotifyOnGuitarButtonHit();
+                    GameObject.Destroy(this.buttonsProcessed[i].gameObject);
+                    this.buttonsProcessed.RemoveAt(i);
+                    return;
                 }
             }
             if(!wasAnythingHit)
@@ -221,7 +270,8 @@ public class GuitarButtons : Minigame
     {
         this.buttonHitCount = 0;
         this.timeElapsed = 0.0f;
-        timeIntervalElapsed = 0.0f;
+        this.minigamePaused = false;
+        timeIntervalElapsed = this.timeInterval / 2;
         for (int i = 0; i < this.buttonsProcessed.Count; i++)
         {
             if(this.buttonsProcessed[i] != null)
@@ -234,11 +284,12 @@ public class GuitarButtons : Minigame
 
     void OnEnable()
     {
-        ResetMinigame();
         this.OnMinigameWin += SelfDisable;
         this.OnMinigameLost += SelfDisable;
         this.OnGuitarButtonHit += Hit;
         this.OnGuitarButtonMiss += Miss;
+        this.OnButtonHitCountValueChanged += HitCountHandler;
+        ResetMinigame();
     }
     void OnDisable()
     {
@@ -246,6 +297,7 @@ public class GuitarButtons : Minigame
         this.OnMinigameLost -= SelfDisable;
         this.OnGuitarButtonHit -= Hit;
         this.OnGuitarButtonMiss -= Miss;
+        this.OnButtonHitCountValueChanged -= HitCountHandler;
     }
 
     void Hit()
@@ -287,5 +339,10 @@ public class GuitarButtons : Minigame
         tmpColor.a = alpha;
         tmpColor *= 0.8f;
         this.frameImage.color = tmpColor;
+    }
+
+    void HitCountHandler(int value)
+    {
+        this.hitCountText.text = "" + value + " / " + this.hitCountTarget;
     }
 }
