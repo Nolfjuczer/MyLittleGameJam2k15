@@ -77,6 +77,8 @@ public class GuitarButtons : Minigame
     public Action OnGuitarButtonHit;
     public Action OnGuitarButtonMiss;
 
+    private bool shouldIncreaseDiff = false;
+
     void NotifyOnGuitarButtonHit()
     {
         if (this.OnGuitarButtonHit != null)
@@ -107,9 +109,9 @@ public class GuitarButtons : Minigame
     {
         if (!this.minigamePaused)
         {
-            this.timeElapsed += Time.deltaTime;
-            this.timeIntervalElapsed += Time.deltaTime;
-            this.effectTimeElapsed += Time.deltaTime;
+            this.timeElapsed += Time.deltaTime * MinigameManager.TimeMultiplier;
+            this.timeIntervalElapsed += Time.deltaTime * MinigameManager.TimeMultiplier;
+            this.effectTimeElapsed += Time.deltaTime * MinigameManager.TimeMultiplier;
 
             if (this.effectTimeElapsed > this.effectLength && this.areEffectsOn)
             {
@@ -122,7 +124,7 @@ public class GuitarButtons : Minigame
             {
                 for (int i = 0; i < this.buttonsProcessed.Count; i++)
                 {
-                    this.buttonsProcessed[i].progres += Time.deltaTime * buttonsSpeed;
+                    this.buttonsProcessed[i].progres += Time.deltaTime * buttonsSpeed * MinigameManager.TimeMultiplier;
 
                     Vector3 pos = this.buttonsProcessed[i].rectTransform.localPosition;
                     pos = Vector3.Lerp(this.StartPos, EndPos, this.buttonsProcessed[i].progres);
@@ -267,6 +269,12 @@ public class GuitarButtons : Minigame
 
     void ResetMinigame()
     {
+        if (this.shouldIncreaseDiff)
+        {
+            IncreaseDiff();
+            this.shouldIncreaseDiff = false;
+        }
+
         this.buttonHitCount = 0;
         this.timeElapsed = 0.0f;
         this.minigamePaused = false;
@@ -321,7 +329,8 @@ public class GuitarButtons : Minigame
     void Miss()
     {
         OnMinigameLost();
-        IncreaseDiff();
+        this.shouldIncreaseDiff = true;
+        //IncreaseDiff();
 
         this.areEffectsOn = true;
         this.effectTimeElapsed = 0.0f;

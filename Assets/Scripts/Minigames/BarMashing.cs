@@ -29,6 +29,8 @@ public class BarMashing : Minigame
     private Color backgroundColorLost = new Color(1.0f, 0.1f, 0.1f, 0.4f);
     private Color backgroundColorWin = new Color(0.1f, 1.0f, 0.1f, 0.4f);
 
+    private bool shouldIncreaseDiff = false;
+
     #endregion
 
     #region Events
@@ -48,7 +50,7 @@ public class BarMashing : Minigame
             if (this.mashBar != null)
             {
                 float value = this.mashBar.value;
-                value += Time.deltaTime * this.growRatio;
+                value += Time.deltaTime * this.growRatio * MinigameManager.TimeMultiplier;
                 this.mashBar.value = value;
             }
             if (this.images != null)
@@ -86,7 +88,8 @@ public class BarMashing : Minigame
                 NotifyOnMinigameLost();
                 this.minigamePaused = true;
                 this.background.color = this.backgroundColorLost;
-                IncreadeDiff();
+                //IncreadeDiff();
+                this.shouldIncreaseDiff = true;
             }
         }
     }
@@ -108,6 +111,11 @@ public class BarMashing : Minigame
 
     void ResetMinigame()
     {
+        if(this.shouldIncreaseDiff)
+        {
+            this.shouldIncreaseDiff = false;
+            IncreadeDiff();
+        }
         if (this.mashBar != null)
         {
             this.mashBar.value = initialProgres;

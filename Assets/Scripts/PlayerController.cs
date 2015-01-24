@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour {
     {
         if(!MinigameManager.IsMinigamePlaying)
         {
-            this.transform.position += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f).normalized * Time.deltaTime * MovementSpeed;
+            Vector3 input = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
+            this.transform.position += input.normalized * Time.deltaTime * MovementSpeed * input.magnitude * PowerUpManager.PillsSpeedMultiplier;
         }
 	}
 }
