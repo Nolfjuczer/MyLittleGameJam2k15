@@ -114,7 +114,7 @@ public class BarMashing : Minigame
         if(this.shouldIncreaseDiff)
         {
             this.shouldIncreaseDiff = false;
-            IncreadeDiff();
+            IncreaseDiff();
         }
         if (this.mashBar != null)
         {
@@ -123,7 +123,7 @@ public class BarMashing : Minigame
         this.minigamePaused = false;
         this.background.color = this.backgroundColorDefault;
     }
-    void IncreadeDiff()
+    public override void IncreaseDiff()
     {
         this.mashValue *= this.mashValueMultiplier;
         this.growRatio *= this.growRationMultiplier;

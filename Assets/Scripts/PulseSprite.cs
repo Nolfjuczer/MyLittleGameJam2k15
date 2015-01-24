@@ -9,7 +9,7 @@ public class PulseSprite : MonoBehaviour
     private float timeElapsed = 0.0f;
 
     float minAlpha = 0.1f;
-    float maxAlpha = 0.7f;
+    float maxAlpha = 0.6f;
 
 	void Start () 
     {
