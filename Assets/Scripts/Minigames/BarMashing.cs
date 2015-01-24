@@ -79,7 +79,7 @@ public class BarMashing : Minigame
                 NotifyOnMinigameWin();
                 this.minigamePaused = true;
                 this.background.color = this.backgroundColorWin;
-                IncreadeDiff();
+                //IncreadeDiff();
             }
             if (this.mashBar.value >= 1.0f)
             {

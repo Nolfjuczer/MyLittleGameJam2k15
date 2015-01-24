@@ -34,6 +34,9 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public DeviceController DeviceController;
     public int FixedItems;
+    public int DevicesCounter;
+
 
 }
