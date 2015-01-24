@@ -4,6 +4,7 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
     private static GameController _instance;
+    public GameObject GameOverMenu = null;
 
     public static GameController Instance
     {
@@ -36,19 +37,23 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
-        int counter = 0;
-        foreach(GameObject device in DeviceController.Devices)
+        if (!GameOver)
         {
-            if (!device.GetComponent<Device>().IsWorking) counter += 1;
-        }
-        if(counter == DevicesCounter)
-        {
-            GameOver = true;
-        }
-        if (GameOver) 
-        { 
-            Debug.Log("Przegrałeś");
-            Debug.Break();
+            int counter = 0;
+            foreach (GameObject device in DeviceController.Devices)
+            {
+                if (!device.GetComponent<Device>().IsWorking) counter += 1;
+            }
+            if (counter == DevicesCounter)
+            {
+                GameOver = true;
+                GameOverMenu.SetActive(true);
+            }
+            if (GameOver)
+            {
+                //Debug.Log("Przegrałeś");
+                //Debug.Break();
+            }
         }
     }
 
@@ -57,5 +62,12 @@ public class GameController : MonoBehaviour {
     public int DevicesCounter;
     public bool GameOver = false;
 
-
+    public void PlayAgain()
+    {
+        Application.LoadLevel(Application.loadedLevelName);
+    }
+    public void GoToMenu()
+    {
+        Application.LoadLevel("menu");
+    }
 }
