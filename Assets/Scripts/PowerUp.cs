@@ -17,8 +17,11 @@ public class PowerUp : MonoBehaviour
         {
             if(Input.GetAxis("Fire1") >= 0.05f)
             {
-                PowerUpManager.PickUp(this.type);
-                GameObject.Destroy(this.gameObject);
+                if(!PowerUpManager.IsBoostOn)
+                {
+                    PowerUpManager.PickUp(this.type);
+                    GameObject.Destroy(this.gameObject);
+                }
             }
         }
 	}
