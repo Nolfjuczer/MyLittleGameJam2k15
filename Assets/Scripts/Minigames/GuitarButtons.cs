@@ -329,7 +329,7 @@ public class GuitarButtons : Minigame
     }
     void Miss()
     {
-        OnMinigameLost();
+        NotifyOnMinigameLost();
         this.minigamePaused = true;
         this.shouldIncreaseDiff = true;
         //IncreaseDiff();
