@@ -10,6 +10,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] sounds = null;
     private List<Speaker> speakers = new List<Speaker>();
 
+    private GameStateEnum lastGameState = GameStateEnum.thirdStage;
+    private float musicVolume = 0.5f;
+
 	void Start () 
     {
         SoundManager.entity = this;
@@ -18,10 +21,48 @@ public class SoundManager : MonoBehaviour
             Debug.Log(sounds[i].name);
         }
 	}
+
+
 	void Update () 
     {
-	
+        GameStateEnum state = GameController.Instance.GameState;
+        if(state != this.lastGameState)
+        {
+            switch(state)
+            {
+                case GameStateEnum.firstStage:
+                    SoundManager.PlaySound(getMusicName(state), true, this.musicVolume);
+                    SoundManager.FadeOutSound(getMusicName(lastGameState));
+                    break;
+                case GameStateEnum.secondStage:
+                    SoundManager.PlaySound(getMusicName(state), true, this.musicVolume);
+                    SoundManager.FadeOutSound(getMusicName(lastGameState));
+                    break;
+                case GameStateEnum.thirdStage:
+                    SoundManager.PlaySound(getMusicName(state), true, this.musicVolume);
+                    SoundManager.FadeOutSound(getMusicName(lastGameState));
+                    break;
+            }
+        }
+        this.lastGameState = state;
 	}
+
+    string getMusicName(GameStateEnum state)
+    {
+        switch(state)
+        {
+            case GameStateEnum.firstStage:
+                return "1";
+                break;
+            case GameStateEnum.secondStage:
+                return "2";
+                break;
+            case GameStateEnum.thirdStage:
+                return "3";
+                break;
+        }
+        return "";
+    }
 
     void OnEnable()
     {

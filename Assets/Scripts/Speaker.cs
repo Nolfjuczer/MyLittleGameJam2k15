@@ -63,6 +63,7 @@ public class Speaker : MonoBehaviour
         this.clip = clip;
         this.source.clip = this.clip;
         this.source.loop = loop;
+        this.loop = loop;
         this.source.volume = volume;
         this.audioLength = this.clip.length;
         this.audioLengthLeft = this.audioLength;
