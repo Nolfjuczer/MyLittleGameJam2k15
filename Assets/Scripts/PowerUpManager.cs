@@ -100,6 +100,7 @@ public class PowerUpManager : MonoBehaviour
                 this._jointTimeSpeedMultiplier = defaultJointTimeSpeedMultiplier;
                 this.isJointTime = false;
                 this.jointEye.enabled = false;
+                SoundManager.FadeOutSound("rege");
             }
         }
         if(this.isPillsTime)
@@ -111,6 +112,7 @@ public class PowerUpManager : MonoBehaviour
                 this.isPillsTime = false;
                 this.pillsBlur.enabled = false;
                 this.trailGO.SetActive(false);
+                SoundManager.FadeOutSound("drum n bass");
             }
         }
         
@@ -146,11 +148,14 @@ public class PowerUpManager : MonoBehaviour
                 this.jointTimer = 0.0f;
                 this.jointEye.enabled = true;
                 GameController.Instance.DeviceController.UsedJoint();
+                SoundManager.PlaySound("papieros start");
+                SoundManager.PlaySound("rege",true);
                 break;
             case PowerUpType.PU_DADS_WHISKEY:
                 this.hasDadsWhiskey = true;
                 this.drunkBlur.enabled = true;
                 this.drunkTimer = 0.0f;
+                SoundManager.PlaySound("szklanki");
                 break;
             case PowerUpType.PU_PILLS:
                 this._pillsSpeedMultiplier = fixedPillsSpeedMultiplier;
@@ -158,6 +163,8 @@ public class PowerUpManager : MonoBehaviour
                 this.isPillsTime = true;
                 this.pillsBlur.enabled = true;
                 this.trailGO.SetActive(true );
+                SoundManager.PlaySound("drum n bass_powerup");
+                SoundManager.PlaySound("drum n bass",true);
                 break;
         }
     }
