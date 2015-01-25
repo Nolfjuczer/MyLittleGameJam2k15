@@ -91,7 +91,7 @@ public class Device : MonoBehaviour {
 
     void Win()
     {
-        GameController.Instance.FixedItems += 1;
+        GameController.Instance.FixAffect();
         GameController.Instance.DeviceController.SomethingFixed();
         MinigameManager.OnMinigameWin -= Win;
         MinigameManager.OnMinigameLost -= Lose;

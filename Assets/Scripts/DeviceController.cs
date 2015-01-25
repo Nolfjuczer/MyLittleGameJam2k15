@@ -4,42 +4,43 @@ using System.Collections.Generic;
 
 public class DeviceController : MonoBehaviour {
 
-    public static List<GameObject> Devices = new List<GameObject>();
+    public static List<GameObject> DevicesStage3 = new List<GameObject>();
+    public static List<GameObject> DevicesStage1 = new List<GameObject>();
+    public static List<GameObject> DevicesStage2 = new List<GameObject>();
 
     private float timeWhenDestroyed;
     private float timeDestroyPeriod;
 
-	// Use this for initialization
-	void Start () {
-        if (Devices.Count != GameController.Instance.DevicesCounter) Debug.Break();
-        for(int i = 0; i<3 ; i++)
-        {
-            int rand = Random.Range(0, Devices.Count);
-            Devices[rand].GetComponent<Device>().DestroyDevice(); ;
-        }
+
+	void Start () 
+    {
+        int rand = Random.Range(0, 1);
+        DevicesStage1[rand].GetComponent<Device>().DestroyDevice();
         timeDestroyPeriod = 20.0f;
         timeWhenDestroyed = 10.0f;
  
 	}
 	
-	// Update is called once per frame
-	void Update () {
-        if(!GameController.Instance.GameOver)
-        {           
-            int tmpUpdate = 0;
-            if (timeDestroyPeriod > 10.0f) timeDestroyPeriod -= Time.deltaTime / 10.0f;
-            if (Time.time - timeWhenDestroyed > timeDestroyPeriod)
+	void Update () 
+    {
+        int tmpUpdate = 0;
+        if (!GameController.Instance.GameOver)
+        {
+            if (GameController.Instance.GameState == GameStateEnum.thirdStage)
             {
-                do
+                tmpUpdate = 0;
+                if (timeDestroyPeriod > 10.0f) timeDestroyPeriod -= Time.deltaTime / 5.0f;
+                if (Time.time - timeWhenDestroyed > timeDestroyPeriod)
                 {
-                    tmpUpdate = Random.Range(0, Devices.Count);
-                } while (!Devices[tmpUpdate].GetComponent<Device>().IsWorking);
-                timeWhenDestroyed = Time.time;
-                Devices[tmpUpdate].GetComponent<Device>().DestroyDevice();
+                    do
+                    {
+                        tmpUpdate = Random.Range(0, DevicesStage3.Count);
+                    } while (!DevicesStage3[tmpUpdate].GetComponent<Device>().IsWorking);
+                    timeWhenDestroyed = Time.time;
+                    DevicesStage3[tmpUpdate].GetComponent<Device>().DestroyDevice();
+                }
             }
         }
-
-	    
 	}
 
     public void UsedJoint()
@@ -51,50 +52,147 @@ public class DeviceController : MonoBehaviour {
     {
         if (!GameController.Instance.GameOver)
         {
-            int rand = Random.Range(0, 2);
-            switch (rand)
+            if (GameController.Instance.GameState == GameStateEnum.thirdStage)
             {
-                case 0:
+                int rand = Random.Range(0, 4);
+                switch (rand)
+                {
+                    case 0:
                     {
                         break;
                     }
-                case 1:
+                    case 3:
+                    {
+                        break;
+                    }
+                    case 1:
                     {
                         int tmp = 0;
                         do
                         {
-                            tmp = Random.Range(0, Devices.Count);
-                        } while (!Devices[tmp].GetComponent<Device>().IsWorking);
-                        Devices[tmp].GetComponent<Device>().DestroyDevice();
+                            tmp = Random.Range(0, DevicesStage3.Count);
+                        } while (!DevicesStage3[tmp].GetComponent<Device>().IsWorking);
+                        DevicesStage3[tmp].GetComponent<Device>().DestroyDevice();
                         break;
-                    }
-                case 2:
+                        }
+                    case 2:
                     {
                         int tmp = 0;
                         for (int i = 0; i < 2; i++)
                         {
                             do
                             {
-                                tmp = Random.Range(0, Devices.Count);
-                            } while (!Devices[tmp].GetComponent<Device>().IsWorking);
-                            Devices[tmp].GetComponent<Device>().DestroyDevice();
+                                tmp = Random.Range(0, DevicesStage3.Count);
+                            } while (!DevicesStage3[tmp].GetComponent<Device>().IsWorking);
+                            DevicesStage3[tmp].GetComponent<Device>().DestroyDevice();
                         }
                         break;
                     }
+                }
+            }
+
+            else if (GameController.Instance.GameState == GameStateEnum.secondStage && !GameController.Instance.DevicesState2Over)
+            {
+                int rand = Random.Range(1, 2);
+                switch (rand)
+                {
+                    case 1:
+                        {
+                            int tmp = 0;
+                            do
+                            {
+                                tmp = Random.Range(0, DevicesStage2.Count);
+                            } while (!DevicesStage2[tmp].GetComponent<Device>().IsWorking);
+                            DevicesStage2[tmp].GetComponent<Device>().DestroyDevice();
+                            break;
+                        }
+                    case 2:
+                        {
+                            int tmp = 0;
+                            for (int i = 0; i < 2; i++)
+                            {
+                                do
+                                {
+                                    tmp = Random.Range(0, DevicesStage2.Count);
+                                } while (!DevicesStage2[tmp].GetComponent<Device>().IsWorking);
+                                DevicesStage2[tmp].GetComponent<Device>().DestroyDevice();
+                            }
+                            break;
+                        }
+                }
+            }
+
+            else if (GameController.Instance.GameState == GameStateEnum.firstStage && !GameController.Instance.DevicesState1Over)
+            {
+                int tmp = 0;
+                do
+                {
+                    tmp = Random.Range(0, DevicesStage1.Count);
+                } while (!DevicesStage1[tmp].GetComponent<Device>().IsWorking);
+                DevicesStage1[tmp].GetComponent<Device>().DestroyDevice();
             }
         }
     }
 
     public void SomethingNotFixed()
     {
-        if (!GameController.Instance.GameOver)
+        if(!GameController.Instance.GameOver )
         {
-            int tmp = 0;
-            do
+            if (GameController.Instance.GameState == GameStateEnum.thirdStage)
             {
-                tmp = Random.Range(0, Devices.Count);
-            } while (!Devices[tmp].GetComponent<Device>().IsWorking);
-            Devices[tmp].GetComponent<Device>().DestroyDevice();
+                int tmp = 0;
+                do
+                {
+                    tmp = Random.Range(0, DevicesStage3.Count);
+                } while (!DevicesStage3[tmp].GetComponent<Device>().IsWorking);
+                DevicesStage3[tmp].GetComponent<Device>().DestroyDevice();
+            }
+
+            else if (GameController.Instance.GameState == GameStateEnum.secondStage && !GameController.Instance.DevicesState2Over)
+            {
+                int tmp = 0;
+                do
+                {
+                    tmp = Random.Range(0, DevicesStage2.Count);
+                } while (!DevicesStage2[tmp].GetComponent<Device>().IsWorking);
+                DevicesStage2[tmp].GetComponent<Device>().DestroyDevice();
+            }
+
+            else if (GameController.Instance.GameState == GameStateEnum.firstStage && !GameController.Instance.DevicesState1Over)
+            {
+                int tmp = 0;
+                do
+                {
+                    tmp = Random.Range(0, DevicesStage1.Count);
+                } while (!DevicesStage1[tmp].GetComponent<Device>().IsWorking);
+                DevicesStage1[tmp].GetComponent<Device>().DestroyDevice();
+            }
+        }
+    }
+
+    public void Stage1Started()
+    {
+        int rand = Random.Range(0, 1);
+        DevicesStage1[rand].GetComponent<Device>().DestroyDevice();
+    }
+
+    public void Stage2Started()
+    {
+        if (DevicesStage2.Count != 8) Debug.Break();
+        for (int i = 0; i < 2; i++)
+        {
+            int rand = Random.Range(0, DevicesStage2.Count);
+            DevicesStage2[rand].GetComponent<Device>().DestroyDevice();
+        }
+
+    }
+    public void Stage3Started()
+    {
+        if (DevicesStage3.Count != GameController.Instance.DevicesCounter) Debug.Break();
+        for (int i = 0; i < 3; i++)
+        {
+            int rand = Random.Range(0, DevicesStage3.Count);
+            DevicesStage3[rand].GetComponent<Device>().DestroyDevice();
         }
     }
 }
