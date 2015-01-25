@@ -53,6 +53,7 @@ public class SoundManager : MonoBehaviour
         tmpGO.transform.parent = this.transform;
         tmpGO.transform.position = Vector3.zero;
         tmpSpeaker = tmpGO.GetComponent<Speaker>();
+        this.speakers.Add(tmpSpeaker);
         return tmpSpeaker;
     }
 
@@ -85,6 +86,34 @@ public class SoundManager : MonoBehaviour
             tmpSpeaker.PlaySound(clip, loop, volume);
         }
         //tmpSpeaker.PlaySound()
+    }
+
+    public static void StopSound(string name)
+    {
+        for(int i = 0;i < SoundManager.entity.speakers.Count;i++)
+        {
+            if(SoundManager.entity.speakers[i] != null)
+            {
+                if(SoundManager.entity.speakers[i].name == name)
+                {
+                    SoundManager.entity.speakers[i].StopSound();
+                }
+            }
+        }
+    }
+
+    public static void FadeOutSound(string name, float time = 0.5f)
+    {
+        for (int i = 0; i < SoundManager.entity.speakers.Count; i++)
+        {
+            if (SoundManager.entity.speakers[i] != null)
+            {
+                if (SoundManager.entity.speakers[i].ClipName == name)
+                {
+                    SoundManager.entity.speakers[i].Fadeout(time);
+                }
+            }
+        }
     }
 
     void EventWin()
