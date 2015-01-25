@@ -23,6 +23,17 @@ public class Speaker : MonoBehaviour
             return this.clip.name;
         }
     }
+    public float Volume
+    {
+        get
+        {
+            return this.source.volume;
+        }
+        set
+        {
+            this.source.volume = value;
+        }
+    }
 
     public bool IsPlaying
     {

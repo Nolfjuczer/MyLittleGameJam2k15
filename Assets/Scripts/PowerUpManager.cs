@@ -12,6 +12,15 @@ public class PowerUpManager : MonoBehaviour
         PU_PILLS = 3
     };
 
+    private bool _isBoostOn = false;
+    public static bool IsBoostOn
+    {
+        get
+        {
+            return PowerUpManager.entity._isBoostOn;
+        }
+    }
+
     private static PowerUpManager entity = null;
 
     private bool hasDadsWhiskey = false;
@@ -101,6 +110,7 @@ public class PowerUpManager : MonoBehaviour
                 this.isJointTime = false;
                 this.jointEye.enabled = false;
                 SoundManager.FadeOutSound("rege");
+                this._isBoostOn = false;
             }
         }
         if(this.isPillsTime)
@@ -113,10 +123,13 @@ public class PowerUpManager : MonoBehaviour
                 this.pillsBlur.enabled = false;
                 this.trailGO.SetActive(false);
                 SoundManager.FadeOutSound("drum n bass");
+                this._isBoostOn = false;
             }
         }
         
 	}
+
+
     public static void PickUp(PowerUpType type)
     {
         PowerUpManager.entity.EnablePowerUp(type);
@@ -150,6 +163,7 @@ public class PowerUpManager : MonoBehaviour
                 GameController.Instance.DeviceController.UsedJoint();
                 SoundManager.PlaySound("papieros start");
                 SoundManager.PlaySound("rege",true);
+                this._isBoostOn = true;
                 break;
             case PowerUpType.PU_DADS_WHISKEY:
                 this.hasDadsWhiskey = true;
@@ -165,6 +179,7 @@ public class PowerUpManager : MonoBehaviour
                 this.trailGO.SetActive(true );
                 SoundManager.PlaySound("drum n bass_powerup");
                 SoundManager.PlaySound("drum n bass",true);
+                this._isBoostOn = true;
                 break;
         }
     }

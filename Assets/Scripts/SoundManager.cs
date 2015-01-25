@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SoundManager : MonoBehaviour 
 {
     public Speaker speakerGO = null;
+    public Speaker musicSpeaker = null;
 
     private static SoundManager entity = null;
     public AudioClip[] sounds = null;
@@ -25,22 +26,31 @@ public class SoundManager : MonoBehaviour
 
 	void Update () 
     {
-        GameStateEnum state = GameController.Instance.GameState;
-        if(state != this.lastGameState)
+        if (PowerUpManager.IsBoostOn)
         {
-            switch(state)
+            this.musicSpeaker.Volume = 0.0f;
+        }
+        else
+        {
+            this.musicSpeaker.Volume = this.musicVolume;
+        }
+
+        GameStateEnum state = GameController.Instance.GameState;
+        if (state != this.lastGameState)
+        {
+            switch (state)
             {
                 case GameStateEnum.firstStage:
-                    SoundManager.PlaySound(getMusicName(state), true, this.musicVolume);
-                    SoundManager.FadeOutSound(getMusicName(lastGameState));
+                    musicSpeaker.PlaySound(GetClip(getMusicName(state)), true, this.musicVolume);
+                    //musicSpeaker.FadeOutSound(getMusicName(lastGameState));
                     break;
                 case GameStateEnum.secondStage:
-                    SoundManager.PlaySound(getMusicName(state), true, this.musicVolume);
-                    SoundManager.FadeOutSound(getMusicName(lastGameState));
+                    musicSpeaker.PlaySound(GetClip(getMusicName(state)), true, this.musicVolume);
+                    //musicSpeaker.FadeOutSound(getMusicName(lastGameState));
                     break;
                 case GameStateEnum.thirdStage:
-                    SoundManager.PlaySound(getMusicName(state), true, this.musicVolume);
-                    SoundManager.FadeOutSound(getMusicName(lastGameState));
+                    musicSpeaker.PlaySound(GetClip(getMusicName(state)), true, this.musicVolume);
+                    //musicSpeaker.FadeOutSound(getMusicName(lastGameState));
                     break;
             }
         }
@@ -96,6 +106,22 @@ public class SoundManager : MonoBehaviour
         tmpSpeaker = tmpGO.GetComponent<Speaker>();
         this.speakers.Add(tmpSpeaker);
         return tmpSpeaker;
+    }
+
+    AudioClip GetClip(string clipName)
+    {
+        AudioClip clip = null;
+        for (int i = 0; i < SoundManager.entity.sounds.Length; i++)
+        {
+            if (SoundManager.entity.sounds[i] != null)
+            {
+                if (SoundManager.entity.sounds[i].name == clipName)
+                {
+                    clip = SoundManager.entity.sounds[i];
+                }
+            }
+        }
+        return clip;
     }
 
     public static void PlaySound(string name,bool loop = false,float volume = 1.0f)
