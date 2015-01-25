@@ -51,6 +51,7 @@ public class PowerUpManager : MonoBehaviour
     public Blur drunkBlur = null;
     public Fisheye jointEye = null;
     public MotionBlur pillsBlur = null;
+    public GameObject trailGO = null;
 
     public static bool IsPilled
     {
@@ -109,8 +110,10 @@ public class PowerUpManager : MonoBehaviour
                 this._pillsSpeedMultiplier = defaultPillsSpeedMultiplier;
                 this.isPillsTime = false;
                 this.pillsBlur.enabled = false;
+                this.trailGO.SetActive(false);
             }
         }
+        
 	}
     public static void PickUp(PowerUpType type)
     {
@@ -143,17 +146,21 @@ public class PowerUpManager : MonoBehaviour
                 this.jointTimer = 0.0f;
                 this.jointEye.enabled = true;
                 GameController.Instance.DeviceController.UsedJoint();
+                SoundManager.PlaySound("papieros start");
                 break;
             case PowerUpType.PU_DADS_WHISKEY:
                 this.hasDadsWhiskey = true;
                 this.drunkBlur.enabled = true;
                 this.drunkTimer = 0.0f;
+                SoundManager.PlaySound("szklanki");
                 break;
             case PowerUpType.PU_PILLS:
                 this._pillsSpeedMultiplier = fixedPillsSpeedMultiplier;
                 this.pillsTimeLeft = this.pillsTimeLength;
                 this.isPillsTime = true;
                 this.pillsBlur.enabled = true;
+                this.trailGO.SetActive(true );
+                SoundManager.PlaySound("drum n bass_powerup");
                 break;
         }
     }
