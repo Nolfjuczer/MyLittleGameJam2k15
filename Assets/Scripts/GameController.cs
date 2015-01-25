@@ -13,7 +13,6 @@ public class GameController : MonoBehaviour {
             if(_instance==null)
             {
                 _instance = GameObject.FindObjectOfType<GameController>();
-                DontDestroyOnLoad(_instance.gameObject);
             }
             return _instance;
         }
@@ -21,23 +20,18 @@ public class GameController : MonoBehaviour {
 
     void Awake()
     {
-        if(_instance==null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            if(this !=_instance)
-            {
-                Destroy(this.gameObject);
-            }
-        }
+        _instance = new GameController();
+        DeviceController = new DeviceController();
+        FixedItems = 0;
+        DevicesCounter = 0;
+        GameOver = false;
+        DevicesState2Over = false;
+        DevicesState1Over = false;
+        GameState = GameStateEnum.firstStage;
     }
 
     void Update()
     {
-        Debug.Log(GameState.ToString());
         if (!GameOver)
         {
             int counter = 0;

@@ -10,7 +10,7 @@ public class HouseController : MonoBehaviour
 
     private List<GameObject> roomsSlots = new List<GameObject>();
 
-    void Awake()
+    void Start()
     {
         int[] tab = { -1, -2, -3, -4, -5, -6, -7, -8, -9 };
         bool contains = true;
@@ -40,18 +40,6 @@ public class HouseController : MonoBehaviour
             tab[i]=rand;
             Rooms[i].transform.position = RoomsSlots[tab[i]].transform.position;
         }
-
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
 
     }
 }

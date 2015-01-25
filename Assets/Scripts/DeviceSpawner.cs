@@ -11,6 +11,10 @@ public class DeviceSpawner : MonoBehaviour {
 
     void Awake()
     {
+
+    }
+
+	void Start () {
         GameObject device1;
         GameObject device2;
         device1 = transform.GetComponentInChildren<RoomDeviceController>().Device1;
@@ -24,19 +28,16 @@ public class DeviceSpawner : MonoBehaviour {
         GameObject dev2 = (GameObject)Instantiate(device2, Slots[rand2].gameObject.transform.position, Slots[rand2].gameObject.transform.rotation);
         DeviceController.DevicesStage3.Add(dev2);
         GameController.Instance.DevicesCounter += 1;
-        if(this.gameObject.name == "Room5")
+        if (this.gameObject.name == "Room5")
         {
             DeviceController.DevicesStage1.Add(dev1);
             DeviceController.DevicesStage1.Add(dev2);
         }
-        if(this.gameObject.name == "Room5" || this.gameObject.name == "Room6" || this.gameObject.name == "Room8" || this.gameObject.name == "Room9")
+        if (this.gameObject.name == "Room5" || this.gameObject.name == "Room6" || this.gameObject.name == "Room8" || this.gameObject.name == "Room9")
         {
             DeviceController.DevicesStage2.Add(dev1);
             DeviceController.DevicesStage2.Add(dev2);
         }
-    }
-	void Start () {
-
 	}
 	
 	// Update is called once per frame

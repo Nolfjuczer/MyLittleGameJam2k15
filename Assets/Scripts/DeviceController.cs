@@ -11,18 +11,27 @@ public class DeviceController : MonoBehaviour {
     private float timeWhenDestroyed;
     private float timeDestroyPeriod;
 
+    void Awake()
+    {
+        DevicesStage1 = new List<GameObject>();
+        DevicesStage2 = new List<GameObject>();
+        DevicesStage3 = new List<GameObject>();
+        
+    }
 
 	void Start () 
     {
-        int rand = Random.Range(0, 1);
-        DevicesStage1[rand].GetComponent<Device>().DestroyDevice();
-        timeDestroyPeriod = 20.0f;
-        timeWhenDestroyed = 10.0f;
- 
+
 	}
 	
 	void Update () 
     {
+        if(GameController.Instance.FixedItems == 0)
+        {
+            Stage1Started();
+            timeDestroyPeriod = 20.0f;
+            timeWhenDestroyed = 10.0f;
+        }
         int tmpUpdate = 0;
         if (!GameController.Instance.GameOver)
         {

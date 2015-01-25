@@ -24,16 +24,15 @@ public class Device : MonoBehaviour {
     void Awake()
     {
         isWorking = true;
-        for(int i =0;i<Particles.Length;i++)
+        for (int i = 0; i < Particles.Length; i++)
         {
             Particles[i].enableEmission = false;
         }
-        
     }
-
 	// Use this for initialization
 	void Start () {
-       
+
+        
 	}
 	
 	// Update is called once per frame
