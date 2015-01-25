@@ -51,6 +51,7 @@ public class PowerUpManager : MonoBehaviour
     public Blur drunkBlur = null;
     public Fisheye jointEye = null;
     public MotionBlur pillsBlur = null;
+    public GameObject trailGO = null;
 
     public static bool IsPilled
     {
@@ -109,8 +110,10 @@ public class PowerUpManager : MonoBehaviour
                 this._pillsSpeedMultiplier = defaultPillsSpeedMultiplier;
                 this.isPillsTime = false;
                 this.pillsBlur.enabled = false;
+                this.trailGO.SetActive(false);
             }
         }
+        
 	}
     public static void PickUp(PowerUpType type)
     {
@@ -154,6 +157,7 @@ public class PowerUpManager : MonoBehaviour
                 this.pillsTimeLeft = this.pillsTimeLength;
                 this.isPillsTime = true;
                 this.pillsBlur.enabled = true;
+                this.trailGO.SetActive(true );
                 break;
         }
     }
