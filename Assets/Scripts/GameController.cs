@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour {
         DevicesState2Over = false;
         DevicesState1Over = false;
         GameState = GameStateEnum.firstStage;
+
     }
 
     void Update()
@@ -79,6 +80,7 @@ public class GameController : MonoBehaviour {
     }
 
     public DeviceController DeviceController;
+    public GameObject[] FogOfWars = new GameObject[2];
     public int FixedItems;
     public int DevicesCounter;
     public bool GameOver = false;
@@ -103,13 +105,26 @@ public class GameController : MonoBehaviour {
         this.FixedItems += 1;
         if (FixedItems == 2)
         {
+            
             GameState = GameStateEnum.secondStage;
             DeviceController.Stage2Started();
+            DisableFogOfWar(FogOfWars[0]);
         }
         if (FixedItems == 6)
         {
             GameState = GameStateEnum.thirdStage;
             DeviceController.Stage3Started();
+            DisableFogOfWar(FogOfWars[1]);
+        }
+    }
+
+    public void DisableFogOfWar(GameObject obj)
+    {
+        obj.renderer.enabled = false;
+        Collider2D[] cols = obj.GetComponents<Collider2D>();
+        foreach(Collider2D col in cols)
+        {
+            col.enabled = false;
         }
 
     }
